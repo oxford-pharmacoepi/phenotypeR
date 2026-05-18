@@ -57,30 +57,29 @@ settingsFiltered <- getSettingsResult(result, resultList)
 
 if(length(dataFiltered) > 0){
   diagnostics <- omopgenerics::settings(result) |> dplyr::pull("diagnostic") |> unique()
-  values$shared_cdm_names <- rbind(dataFiltered$summarise_omop_snapshot,
-                                   dataFiltered$cohort_code_use,
-                                   dataFiltered$summarise_cohort_count,
-                                   dataFiltered$incidence) |>
+  values$shared_cdm_names <- result |>
     dplyr::select("cdm_name") |>
     dplyr::distinct() |>
     dplyr::pull("cdm_name") |>
     sort()
-  if((length(diagnostics) > 1 || diagnostics != "databaseDiagnostics")) {
+
+  if((length(diagnostics) >= 1 || diagnostics != "databaseDiagnostics")) {
     # Common variables
     if(length(diagnostics) == 1 && diagnostics == "populationDiagnostics"){
-      values$shared_cohort_names <- dataFiltered$incidence |>
+      values$shared_cohort_names <- result |>
         visOmopResults::splitGroup() |>
         dplyr::pull("outcome_cohort_name") |>
         unique() |>
         sort()
     }else{
-      values$shared_cohort_names <- rbind(dataFiltered$cohort_code_use, dataFiltered$summarise_cohort_count, dataFiltered$incidence) |>
-        dplyr::mutate(group_name = gsub("outcome_cohort_name", "cohort_name", group_name)) |>
+      values$shared_cohort_names <- result |>
         visOmopResults::splitGroup() |>
-        dplyr::select("cohort_name") |>
+        dplyr::select(dplyr::any_of(c("cohort_name", "outcome_cohort_name"))) |>
         dplyr::distinct() |>
-        dplyr::filter(cohort_name != "overall") |>
-        dplyr::pull("cohort_name") |>
+        dplyr::filter(!grepl("_sampled|_matched", cohort_name),
+                      cohort_name != "overall")
+      values$shared_cohort_names  <- suppressWarnings(c(values$shared_cohort_names$cohort_name,
+                                                        values$shared_cohort_names$outcome_cohort_name)) |>
         sort()
     }
   }
@@ -318,7 +317,7 @@ selected$summarise_database_description_cdm_name <- selected$shared_cdm_names
 choices$summarise_database_description_cdm_name <- choices$shared_cdm_names
 
 # Settings pop out----
-settingsFiltered <- purrr::map(names(settingsFiltered), 
+settingsFiltered <- purrr::map(names(settingsFiltered),
                                \(x) tidySettings(settingsFiltered, x)) |>
   stats::setNames(names(settingsFiltered))
 

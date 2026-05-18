@@ -31,7 +31,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(omock)
+# library(omock)
 #' library(CohortConstructor)
 #' library(PhenotypeR)
 #' library(CDMConnector)
@@ -94,6 +94,7 @@ cohortDiagnostics <- function(cohort,
   }
 
   cohortNameSampled <- paste0(prefix, "sampled")
+
   if(is.null(cohortSample)){
     cdm[[cohortNameSampled]] <- CohortConstructor::copyCohorts(cdm[[cohortName]], cohortId = cohortId, name = cohortNameSampled)
   }else{
@@ -111,7 +112,7 @@ cohortDiagnostics <- function(cohort,
       if (!is.null(getOption("omopgenerics.logFile"))) {
         omopgenerics::logMessage(paste0("Cohort diagnostics - sampling cohorts to up to ", cohortSample, " individuals"))
       }
-      cdm[[cohortNameSampled]] <- CohortConstructor::sampleCohorts(cdm[[cohortName]],
+      cdm[[cohortNameSampled]] <- CohortConstructor::sampleCohorts(CohortConstructor::subsetCohorts(cohort, cohortId = cohortId),
                                                                    cohortId = cohortId,
                                                                    independent = FALSE,
                                                                    n = cohortSample,
@@ -176,17 +177,47 @@ cohortDiagnostics <- function(cohort,
     if (!is.null(getOption("omopgenerics.logFile"))) {
       omopgenerics::logMessage("Cohort diagnostics - age density")
     }
-    results[["cohort_density"]] <- cdm[[tempCohortName]] |>
-      PatientProfiles::addCohortName() |>
-      PatientProfiles::summariseResult(
-        counts = FALSE,
-        strata    = "sex",
-        includeOverallStrata = FALSE,
-        group     = "cohort_name",
-        includeOverallGroup  = FALSE,
-        variables = "age",
-        estimates = "density"
-      )
+
+    # Check cohort sizes
+    x <- cdm[[tempCohortName]] |>
+      omopgenerics::settings() |>
+      dplyr::filter(!grepl("_matched", .data$cohort_name)) |>
+      dplyr::pull("cohort_definition_id")
+
+    cohortDefinitionIds <- cdm[[tempCohortName]] |>
+      omopgenerics::cohortCount() |>
+      dplyr::filter(.data$cohort_definition_id %in% x,
+                    .data$number_subjects > 100) |>
+      dplyr::pull("cohort_definition_id")
+
+    if(length(cohortDefinitionIds) >= 1) {
+
+      cohortDefinitionIds <- cdm[[tempCohortName]] |>
+        omopgenerics::cohortCount() |>
+        dplyr::filter(.data$number_subjects >= 100) |>
+        dplyr::pull("cohort_definition_id")
+
+      results[["cohort_density"]] <- cdm[[tempCohortName]] |>
+        CohortConstructor::subsetCohorts(cohortId = cohortDefinitionIds) |>
+        PatientProfiles::addCohortName() |>
+        PatientProfiles::summariseResult(
+          counts = FALSE,
+          strata    = "sex",
+          includeOverallStrata = FALSE,
+          group     = "cohort_name",
+          includeOverallGroup  = FALSE,
+          variables = "age",
+          estimates = "density"
+        )
+
+      x <- setdiff(cdm[[tempCohortName]] |> omopgenerics::settings() |> dplyr::pull("cohort_definition_id"), cohortDefinitionIds)
+      if(length(x) != 0) {
+        names <- omopgenerics::getCohortName(cdm[[tempCohortName]], x)
+        cli::cli_warn("Cohorts {names} have less than 100 subjects. Age distribution will not be calculated for {?this cohort/these cohorts}.")
+      }
+    } else {
+      cli::cli_warn("No cohorts have more than 100 subjects. Age distribution will not be calculated.")
+    }
   }
 
   # Large scale characteristics ----
@@ -215,7 +246,7 @@ cohortDiagnostics <- function(cohort,
     } else{
       cli::cli_inform("Using user specified event tables for large scale characteristics set via global option: {lscTableEvents}")
     }
-    lscTableEvents<-intersect(lscTableEvents, names(cdm))
+    lscTableEvents <-intersect(lscTableEvents, names(cdm))
 
 
     lscTableEpisodes <- getOption("PhenotypeR_summariseLargeScaleCharacteristics_episodeInWindow")
