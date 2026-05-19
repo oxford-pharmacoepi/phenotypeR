@@ -15,7 +15,7 @@ clinical_descriptions_path <- here::here("extras", "clinical_descriptions")
 database_descriptions_path  <- here::here("extras", "database_descriptions")
 
 # run against different omock datasets
-datasets <- c("GiBleed", "synpuf-1k_5.3", "synthea-covid19-200k")
+datasets <- c("GiBleed", "synpuf-1k_5.3")
 result <- list()
 for(i in seq_along(datasets)){
 working_dataset <- datasets[i]
