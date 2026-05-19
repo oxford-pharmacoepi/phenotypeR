@@ -113,7 +113,6 @@ cohortDiagnostics <- function(cohort,
         omopgenerics::logMessage(paste0("Cohort diagnostics - sampling cohorts to up to ", cohortSample, " individuals"))
       }
       cdm[[cohortNameSampled]] <- CohortConstructor::sampleCohorts(CohortConstructor::subsetCohorts(cohort, cohortId = cohortId),
-                                                                   cohortId = cohortId,
                                                                    independent = FALSE,
                                                                    n = cohortSample,
                                                                    name = cohortNameSampled)
