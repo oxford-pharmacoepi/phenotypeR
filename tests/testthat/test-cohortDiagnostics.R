@@ -57,7 +57,7 @@ test_that("run with multiple cohorts", {
   testthat::skip_on_cran()
 
   cdm_local <- omock::mockCdmReference() |>
-    omock::mockPerson(nPerson = 100, seed = 1234) |>
+    omock::mockPerson(nPerson = 2000, seed = 1234) |>
     omock::mockObservationPeriod() |>
     omock::mockConditionOccurrence() |>
     omock::mockDrugExposure() |>
@@ -128,11 +128,86 @@ test_that("run with multiple cohorts", {
 
 
 
-  # empty death tables
+  # empty death tables ----
   cdm <- omopgenerics::emptyOmopTable(cdm, name = "death")
   expect_warning(cohortDiagnostics(cdm$my_cohort, cohortSurvival = TRUE))
 
-  # check survival analysis is being done
+  # check age distribution when there are cohorts with less than 100 people ----
+  cdm_local <- omock::mockCdmReference() |>
+    omock::mockPerson(nPerson = 500, seed = 1) |>
+    omock::mockObservationPeriod(seed = 1) |>
+    omock::mockConditionOccurrence(seed = 1) |>
+    omock::mockVisitOccurrence() |>
+    omock::mockCohort(name = "my_cohort", numberCohorts = 2, seed = 1)
+
+  # check when only one cohortId is provided and it does not have more than 100 subjects
+  expect_warning(res <- cdm_local$my_cohort |>
+    cohortDiagnostics(cohortId = 1,
+                      cohortCount = FALSE,
+                      cohortCharacteristics = TRUE,
+                      largeScaleCharacteristics = FALSE,
+                      compareCohorts = FALSE,
+                      cohortSurvival = FALSE,
+                      cohortSample = 99,
+                      matchedSample = NULL
+                      ))
+
+  expect_equal(res |>
+    dplyr::distinct(group_level) |>
+    dplyr::pull(),
+    c("cohort_1", "cohort_1_sampled", "cohort_1_matched"))
+
+  expect_equal(res |>
+    omopgenerics::settings() |>
+    dplyr::pull("result_type"),
+    "summarise_characteristics")
+
+  # check when only one of the cohorts has less than 100 subjects, and the sample and the matched cohort of this one do not reach 100 subjects
+  cdm_local$my_cohort <- cdm_local$my_cohort |>
+    CohortConstructor::requireAge(ageRange = c(0,10), cohortId = 1)
+
+  expect_warning(res <- cdm_local$my_cohort |>
+                   cohortDiagnostics(cohortCount = FALSE,
+                                     cohortCharacteristics = TRUE,
+                                     largeScaleCharacteristics = FALSE,
+                                     compareCohorts = FALSE,
+                                     cohortSurvival = FALSE,
+                                     cohortSample = NULL,
+                                     matchedSample = NULL))
+
+  expect_equal(res |>
+                visOmopResults::filterSettings(result_type == "summarise_table") |>
+                dplyr::distinct(group_level) |>
+                dplyr::pull("group_level"),
+              "cohort_2")
+
+  # check when only one of the cohorts has less than 100 subjects
+  cdm_local <- omock::mockCdmReference() |>
+    omock::mockPerson(nPerson = 2000, seed = 1) |>
+    omock::mockObservationPeriod(seed = 1) |>
+    omock::mockConditionOccurrence(seed = 1) |>
+    omock::mockVisitOccurrence() |>
+    omock::mockCohort(name = "my_cohort", numberCohorts = 2, seed = 1)
+
+  cdm_local$my_cohort <- cdm_local$my_cohort |>
+    CohortConstructor::requireAge(ageRange = c(0,5), cohortId = 1)
+
+  expect_warning(res <- cdm_local$my_cohort |>
+                   cohortDiagnostics(cohortCount = FALSE,
+                                     cohortCharacteristics = TRUE,
+                                     largeScaleCharacteristics = FALSE,
+                                     compareCohorts = FALSE,
+                                     cohortSurvival = FALSE,
+                                     cohortSample = NULL,
+                                     matchedSample = NULL))
+
+  expect_equal(res |>
+    visOmopResults::filterSettings(result_type == "summarise_table") |>
+    dplyr::distinct(group_level) |>
+    dplyr::pull("group_level"),
+  c("cohort_2", "cohort_2_matched", "cohort_2_sampled"))
+
+  # check survival analysis is being done -----
   cdm_local <- omock::mockCdmReference() |>
     omock::mockPerson(nPerson = 100) |>
     omock::mockObservationPeriod() |>

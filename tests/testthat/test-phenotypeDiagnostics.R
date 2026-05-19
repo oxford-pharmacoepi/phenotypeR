@@ -45,7 +45,7 @@ test_that("overall diagnostics function", {
   skip_on_cran()
 
   cdm_local <- omock::mockCdmReference() |>
-    omock::mockPerson(nPerson = 100) |>
+    omock::mockPerson(nPerson = 5000) |>
     omock::mockObservationPeriod() |>
     omock::mockConditionOccurrence() |>
     omock::mockDrugExposure() |>
@@ -137,7 +137,7 @@ test_that("overall diagnostics function", {
                                             databaseDiagnostics = NULL,
                                             codelistDiagnostics = NULL,
                                             populationDiagnostics = NULL,
-                                            cohortDiagnostics = list("matchedSample" = 100))
+                                            cohortDiagnostics = list("matchedSample" = 1000))
 
   expect_identical(
     c("summarise_characteristics",

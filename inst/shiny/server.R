@@ -1901,12 +1901,7 @@ server <- function(input, output, session) {
       arrange(group_level)
 
     if (nrow(summarise_table) == 0 || nrow(summarise_characteristics) == 0 ) {
-      shiny::validate("No results found for selected inputs")
-    }
-
-
-    if (nrow(summarise_table) == 0 || nrow(summarise_characteristics) == 0 ) {
-      shiny::validate("No results found for selected inputs")
+      shiny::validate("No results found for selected inputs. Note that age distributions are only calculated for cohorts with at least 100 individuals.")
     }
 
     plotAgeDensity(summarise_table, summarise_characteristics, input$summarise_characteristics_add_interquantile_range)
