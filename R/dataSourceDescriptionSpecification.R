@@ -38,27 +38,27 @@ defineDataSourceSpec <- function() {
         properties = list(
           name_of_data_source = list(
             type = "string",
-            description = "The full name of the data source"
+            description = "The full name of the data source."
           ),
           data_source_acronym = list(
             type = "string",
-            description = "Short abbreviation for the database."
+            description = "Short abbreviation/ acronym used in studies (e.g. for tables and figures)."
           ),
           data_source_countries = list(
             type = "string",
-            description = "The URL of the official data source website."
+            description = "The country/countries covered by the data source"
           ),
           data_source_website = list(
             type = "string",
-            description = "The URL of the official data source website."
+            description = "The URL for the website or webpage dedicated to the data source, if available"
           ),
           hma_ema_catalogue = list(
             type = "string",
-            description = "The URL of the HMA-EMA Catalogue entry."
+            description = "The URL for the webpage of the data source on the HMA-EMA Catalogues of real-world data sources and studies, if available"
           ),
           main_references = list(
             type = "string",
-            description = "References to publications describing the dataset."
+            description = "References to publications describing the data source (e.g. data source profile publications)."
           )
         ),
         required = c("name_of_data_source",
