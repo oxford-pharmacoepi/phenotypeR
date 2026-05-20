@@ -10,6 +10,9 @@ navbar:
     description_shiny:
       text: "Decriptions shiny app"
       href: https://dpa-pde-oxford.shinyapps.io/PhenotypeDescriptionsShiny/
+    description_shiny:
+      text: "Data source decriptions shiny app"
+      href: https://dpa-pde-oxford.shinyapps.io/PhenotypeDataSourceDescriptionsShiny/
     custom_shiny:
       text: "PhenotypeR shiny app"
       href: https://dpa-pde-oxford.shinyapps.io/PhenotypeRShiny/
@@ -49,6 +52,7 @@ reference:
   - dataSourceDescriptionSpecification
   - importDatabaseDescription
   - shinyDescriptions
+  - shinyDataSourceDescriptions
 - subtitle: Expectations for phenotyping results
 - contents:
   - getCohortExpectations
