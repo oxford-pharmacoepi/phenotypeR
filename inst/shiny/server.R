@@ -2699,6 +2699,10 @@ server <- function(input, output, session) {
       plot$data <- plot$data |>
         filter(incidence_100000_pys > 0)
 
+      if (nrow(plot$data) == 0) {
+        shiny::validate("No positive estimates in results")
+      }
+
       if(!is.null(facet) && isTRUE(facet_free)){
         plot <- plot +
           facet_wrap(facets = facet, scales = "free")
