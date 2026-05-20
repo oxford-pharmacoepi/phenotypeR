@@ -60,7 +60,6 @@ The diganostics include:
 }
 \examples{
 \donttest{
-library(omock)
 library(CohortConstructor)
 library(PhenotypeR)
 library(CDMConnector)
