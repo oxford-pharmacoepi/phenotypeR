@@ -1,14 +1,17 @@
 server <- function(input, output, session) {
 
   admin_props <- names(db_spec$properties$administrative_details$properties)
-  data_props <- names(db_spec$properties$data_elements_collected$properties)
+  data_props <- names(db_spec$properties$data_collection$properties)
+  omop_props <- names(db_spec$properties$omop_standardisation$properties)
 
-  all_props <- c(admin_props, data_props)
+  all_props <- c(admin_props, data_props, omop_props)
   db_props <- stats::setNames(all_props, all_props)
 
   required_admin <- unlist(db_spec$properties$administrative_details$required)
-  required_data_elements <- unlist(db_spec$properties$data_elements_collected$required)
-  all_db_fields <- c(required_admin, required_data_elements)
+  required_data_elements <- unlist(db_spec$properties$data_collection$required)
+  required_omop_elements <- unlist(db_spec$properties$omop_standardisation$required)
+
+  all_db_fields <- c(required_admin, required_data_elements, required_omop_elements)
 
   db_labels <- sapply(all_db_fields, get_label_text)
   names(db_labels) <- all_db_fields

@@ -1,5 +1,5 @@
 ui <- bslib::page(
-  
+
   theme = bslib::bs_theme(version = 5, preset = "lumen"),
 
   id = "nav",
@@ -47,11 +47,12 @@ ui <- bslib::page(
                shiny::p(db_spec$description,
                         class = "text-muted mb-4"),
 
-               
+
                bslib::accordion(
                  multiple = TRUE,
                  open = c("Administrative details",
-                          "Data elements collected"),
+                          "Data collected",
+                          "OMOP CDM mapping"),
 
                  bslib::accordion_panel(
                    title = "Administrative details",
@@ -60,26 +61,32 @@ ui <- bslib::page(
                  ),
 
                  bslib::accordion_panel(
-                   title = "Data elements collected",
+                   title = "Data collected",
                    icon = shiny::icon("file-medical"),
-                   db_data_ui
+                   db_data_collection_ui
+                 ),
+
+                 bslib::accordion_panel(
+                   title = "OMOP CDM mapping",
+                   icon = shiny::icon("file-medical"),
+                   db_omop_standardisation_ui
                  )
                )
     ),
-    
+
     div(style = "display: flex; gap: 10px; align-items: flex-start;",
-        
+
         div(class = "custom-file-btn",
             fileInput(
               inputId = "upload_json",
-              label = NULL,          
-              buttonLabel = "Upload JSON", 
-              width = "auto"      
+              label = NULL,
+              buttonLabel = "Upload JSON",
+              width = "auto"
             )
         ),
-        
+
         shiny::uiOutput("db_download_section")
     ),
-    
+
   )
 )

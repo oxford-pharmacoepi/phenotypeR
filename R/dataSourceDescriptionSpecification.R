@@ -44,10 +44,6 @@ defineDataSourceSpec <- function() {
             type = "string",
             description = "Short abbreviation/ acronym used in studies (e.g. for tables and figures)."
           ),
-          data_source_countries = list(
-            type = "string",
-            description = "The country/countries covered by the data source"
-          ),
           data_source_website = list(
             type = "string",
             description = "The URL for the website or webpage dedicated to the data source, if available"
@@ -62,18 +58,21 @@ defineDataSourceSpec <- function() {
           )
         ),
         required = c("name_of_data_source",
-                     "data_source_acronym",
-                     "data_source_countries"),
+                     "data_source_acronym"),
         additionalProperties = FALSE
       ),
 
-      data_elements_collected = list(
+      data_collection = list(
         type = "object",
         description = "Information regarding the types of data captured.",
         properties = list(
-          data_coverage_and_timespan = list(
+          geography = list(
             type = "string",
-            description = "The calendar time covered by dataset and information of the population captured."
+            description = "The geographical area (e.g. country) covered by the data source"
+          ),
+          population = list(
+            type = "string",
+            description = "Information on the population captured by the data source."
           ),
           healthcare_setting_type_of_data = list(
             type = "string",
@@ -87,17 +86,13 @@ defineDataSourceSpec <- function() {
             type = "string",
             description = "Representativeness of the dataset compared to the underlying population."
           ),
-          data_content_source_coding = list(
+          data_source_coding = list(
             type = "string",
             description = "What data elements are captured and what source vocabularies are used."
           ),
-          data_harmonisation = list(
+          source_quality_control = list(
             type = "string",
-            description = "Description of process of mapping source data to the OMOP Common Data Model"
-          ),
-          quality_control = list(
-            type = "string",
-            description = "Summary of quality control processes performed on source data and in mapping to the OMOP Common Data Model."
+            description = "Summary of quality control processes performed on source data."
           ),
           linkage = list(
             type = "string",
@@ -107,24 +102,43 @@ defineDataSourceSpec <- function() {
             type = "string",
             description = "How are deaths captured for individuals included in the data source."
           ),
-          limitations = list(
+          source_limitations = list(
             type = "string",
             description = "Summary of limitations of the data source."
           )
         ),
-        required = c("data_coverage_and_timespan",
+        required = c("geography",
+                     "population",
                      "healthcare_setting_type_of_data",
                      "data_collection_process",
                      "general_representativeness",
-                     "data_content_source_coding",
-                     "data_harmonisation",
-                     "quality_control",
+                     "data_source_coding",
+                     "source_quality_control",
                      "linkage",
                      "mortality",
-                     "limitations"),
+                     "source_limitations"),
         additionalProperties = FALSE
-      )
-    ),
-    required = c("administrative_details", "data_elements_collected")
+      ),
+
+      omop_standardisation = list(
+        type = "object",
+        description = "Information related to mapping data to the OMOP Common Data Model",
+          properties = list(
+            omop_mapping = list(
+              type = "string",
+              description = "Description of process of mapping source data to the OMOP Common Data Model"
+            ),
+            omop_quality_control = list(
+              type = "string",
+              description = "Summary of quality control processes performed while mapping to the OMOP Common Data Model and on the mapped data."
+            )
+          ),
+          required = c("omop_mapping",
+                       "omop_quality_control"),
+          additionalProperties = FALSE
+        ),
+
+    required = c("administrative_details", "data_elements_collected", "omop_standardisation")
+  )
   )
 }
