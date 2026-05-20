@@ -60,8 +60,10 @@ The diganostics include:
 }
 \examples{
 \donttest{
+
 library(CohortConstructor)
 library(PhenotypeR)
+library(omock)
 library(CDMConnector)
 
 cdm <- mockCdmFromDataset(source = "duckdb")
