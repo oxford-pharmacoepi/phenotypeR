@@ -31,9 +31,10 @@
 #'
 #' @examples
 #' \donttest{
-#' library(omock)
+#'
 #' library(CohortConstructor)
 #' library(PhenotypeR)
+#' library(omock)
 #' library(CDMConnector)
 #'
 #' cdm <- mockCdmFromDataset(source = "duckdb")
