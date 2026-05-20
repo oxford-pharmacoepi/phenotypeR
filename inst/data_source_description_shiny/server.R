@@ -1,5 +1,11 @@
 server <- function(input, output, session) {
 
+  admin_props <- names(db_spec$properties$administrative_details$properties)
+  data_props <- names(db_spec$properties$data_elements_collected$properties)
+
+  all_props <- c(admin_props, data_props)
+  db_props <- stats::setNames(all_props, all_props)
+
   required_admin <- unlist(db_spec$properties$administrative_details$required)
   required_data_elements <- unlist(db_spec$properties$data_elements_collected$required)
   all_db_fields <- c(required_admin, required_data_elements)
@@ -32,7 +38,7 @@ server <- function(input, output, session) {
 
   shiny::observeEvent(input$upload_json, {
     shiny::req(input$upload_json)
-    
+
     tryCatch({
 
       validate <- jsonvalidate::json_validate(
@@ -40,11 +46,11 @@ server <- function(input, output, session) {
         PhenotypeR::dataSourceDescriptionSpecification(),
         verbose = TRUE,
         error = TRUE)
-      
-      uploaded_values <- jsonlite::fromJSON(input$upload_json$datapath) |> 
+
+      uploaded_values <- jsonlite::fromJSON(input$upload_json$datapath) |>
         purrr::flatten()
       id_to_update <- names(uploaded_values)
-     
+
       for (id in id_to_update) {
         val <- uploaded_values[[id]]
           if (!is.null(val) && length(val) > 0) {
@@ -57,12 +63,12 @@ server <- function(input, output, session) {
       }
 
       shiny::showNotification("Data successfully loaded from JSON", type = "message")
-      
+
     }, error = function(e) {
       shiny::showNotification(paste("Failed to parse JSON:", e$message), type = "error")
     })
   })
-  
+
   output$db_download_section <- shiny::renderUI({
     missing <- db_missing()
 
@@ -84,14 +90,23 @@ server <- function(input, output, session) {
 
   output$download_db_json <- shiny::downloadHandler(
     filename = function() {
-      paste0("database_description_", Sys.Date(), ".json")
+      acronym <- input$data_source_acronym
+
+      paste0(acronym, "_", "database_description", ".json")
+
     },
     content = function(file) {
       shiny::req(length(db_missing()) == 0)
 
-      export_data <- stats::setNames(lapply(names(db_props), function(id) {
-        input[[id]]
-      }), names(db_props))
+      export_data <- list(
+        administrative_details = stats::setNames(lapply(admin_props, function(id) {
+          if (is.null(input[[id]])) character(0) else input[[id]]
+        }), admin_props),
+
+        data_elements_collected = stats::setNames(lapply(data_props, function(id) {
+          if (is.null(input[[id]])) character(0) else input[[id]]
+        }), data_props)
+      )
 
       jsonlite::write_json(
         export_data,
@@ -101,5 +116,5 @@ server <- function(input, output, session) {
       )
     }
   )
-  
+
 }
