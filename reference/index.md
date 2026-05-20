@@ -34,6 +34,9 @@
 - [`shinyDescriptions()`](https://ohdsi.github.io/PhenotypeR/reference/shinyDescriptions.md)
   : Shiny app to create descriptions for contextualising diagnostic
   results
+- [`shinyDataSourceDescriptions()`](https://ohdsi.github.io/PhenotypeR/reference/shinyDataSourceDescriptions.md)
+  : Shiny app to create data source descriptions for contextualising
+  diagnostic results
 
 ### Expectations for phenotyping results
 
