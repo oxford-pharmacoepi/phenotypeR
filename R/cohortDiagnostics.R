@@ -32,6 +32,7 @@
 #' @examples
 #' \donttest{
 #'
+#' library(omock)
 #' library(CohortConstructor)
 #' library(PhenotypeR)
 #' library(omock)
