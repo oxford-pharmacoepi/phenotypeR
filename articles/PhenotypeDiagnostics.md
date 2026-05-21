@@ -228,6 +228,40 @@ number). Sampling can be switched off by setting `matchedSample = NULL`.
 Creation of age and sex matched controls can be skipped by setting
 `matchedSample = 0`.
 
+#### Modify windows, event in windows, and episodes in window
+
+By default, CohortDiagnostics uses the following predefined `window`,
+`eventInWindow`, and `episodesInWindow` settings for the large-scale
+characterisation analysis:
+
+- `window = list(c(-365, -31), c(-30, -1), c(0, 0), c(1, 30), c(31, 365))`
+
+- `tableEvents = c("condition_occurrence", "measurement", "procedure_occurrence", "device_exposure", "observation")`
+
+- `tableEpisodes = c("drug_exposure", "drug_era", "visit_occurrence")`
+
+*\*(see the `window`, `eventInWindow`, and `episodeInWindow` arguments
+of the **summariseLargeScaleCharacteristics** function in
+CohortCharacteristics R package for further details)*
+
+These defaults can be overwritten by setting global options. For
+example, to restrict the large-scale characterisation to only the index
+date (i.e., modifying the `window` parameter), use:
+
+``` r
+
+options("PhenotypeR_summariseLargeScaleCharacteristics_window" = list(c(0, 0)))
+```
+
+Alternatively, to include only events from the *condition_occurrence*
+table and episodes from the *drug_exposure* table, use:
+
+``` r
+
+options("PhenotypeR_summariseLargeScaleCharacteristics_eventInWindow"   = c("condition_occurrence"))
+options("PhenotypeR_summariseLargeScaleCharacteristics_episodeInWindow" = c("drug_exposure"))
+```
+
 ### Population diagnostics
 
 Population diagnostics builds on

@@ -288,6 +288,34 @@ the study cohorts. The number matched can be changed by altering the
 can be switched off by setting <code>matchedSample = NULL</code>.
 Creation of age and sex matched controls can be skipped by setting
 <code>matchedSample = 0</code>.</p>
+<div class="section level4">
+<h4 id="modify-windows-event-in-windows-and-episodes-in-window">Modify windows, event in windows, and episodes in window<a class="anchor" aria-label="anchor" href="#modify-windows-event-in-windows-and-episodes-in-window"></a>
+</h4>
+<p>By default, CohortDiagnostics uses the following predefined
+<code>window</code>, <code>eventInWindow</code>, and
+<code>episodesInWindow</code> settings for the large-scale
+characterisation analysis:</p>
+<ul>
+<li><p><code>window = list(c(-365, -31), c(-30, -1), c(0, 0), c(1, 30), c(31, 365))</code></p></li>
+<li><p><code>tableEvents = c("condition_occurrence", "measurement", "procedure_occurrence", "device_exposure", "observation")</code></p></li>
+<li><p><code>tableEpisodes = c("drug_exposure", "drug_era", "visit_occurrence")</code></p></li>
+</ul>
+<p><em>*(see the <code>window</code>, <code>eventInWindow</code>, and
+<code>episodeInWindow</code> arguments of the
+<strong>summariseLargeScaleCharacteristics</strong> function in
+CohortCharacteristics R package for further details)</em></p>
+<p>These defaults can be overwritten by setting global options. For
+example, to restrict the large-scale characterisation to only the index
+date (i.e., modifying the <code>window</code> parameter), use:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"PhenotypeR_summariseLargeScaleCharacteristics_window"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Alternatively, to include only events from the
+<em>condition_occurrence</em> table and episodes from the
+<em>drug_exposure</em> table, use:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"PhenotypeR_summariseLargeScaleCharacteristics_eventInWindow"</span>   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"condition_occurrence"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"PhenotypeR_summariseLargeScaleCharacteristics_episodeInWindow"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="population-diagnostics">Population diagnostics<a class="anchor" aria-label="anchor" href="#population-diagnostics"></a>
@@ -329,7 +357,7 @@ switched off by setting <code>populationSample = NULL</code>.</p>
 <p>To save our diagnositics results, we can use <a href="https://darwin-eu.github.io/omopgenerics/reference/exportSummarisedResult.html" class="external-link">exportSummarisedResult</a>
 function from <a href="https://darwin-eu.github.io/omopgenerics/index.html" class="external-link">omopgenerics</a>
 R Package:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/exportSummarisedResult.html" class="external-link">exportSummarisedResult</a></span><span class="op">(</span><span class="va">diagnostics</span>, path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span>, minCellCount <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -338,7 +366,7 @@ R Package:</p>
 <p>Once we get our <strong>Phenotype diagnostics</strong> result, we can
 use <code>shinyDiagnostics</code> to easily create a shiny app and
 visualise our results:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shinyDiagnostics.html">shinyDiagnostics</a></span><span class="op">(</span><span class="va">diagnostics</span>,</span>
 <span>                 directory <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                 minCellCount <span class="op">=</span> <span class="fl">5</span>, </span>
