@@ -2,7 +2,7 @@
   "metadata": {
     "phenotype_name": "user_of_morphine",
     "version": "1.0",
-    "created_by": "gemini-2.5-pro (via PhenotypeR::getClinicalDescription())",
+    "created_by": "gemini-2.5-pro (via PhenotypeR::draftClinicalDescription())",
     "created_date": "2026-04-22",
     "last_edited_by": "N/A",
     "last_edited_date": "2026-04-22",

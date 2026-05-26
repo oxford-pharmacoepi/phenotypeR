@@ -1,6 +1,6 @@
 
 chat <- ellmer::chat_google_gemini(model = "gemini-2.5-pro")
-PhenotypeR::getClinicalDescription(chat = chat,
+PhenotypeR::draftClinicalDescription(chat = chat,
                                    name = c("hypertension",
                                             "type_2_diabetes",
                                             "hospitalised_inpatient",

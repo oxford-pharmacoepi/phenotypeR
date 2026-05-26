@@ -1,4 +1,4 @@
-name: Generate and Deploy Descriptions Shiny App
+name: Generate and Deploy Clinical Descriptions Shiny App
 
 on:
   push:
