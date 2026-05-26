@@ -10,7 +10,7 @@ cohortDiagnostics(
   cohortCount = TRUE,
   cohortCharacteristics = TRUE,
   largeScaleCharacteristics = TRUE,
-  compareCohorts = TRUE,
+  compareCohorts = FALSE,
   cohortSurvival = FALSE,
   cohortSample = 20000,
   matchedSample = 1000
@@ -61,6 +61,7 @@ The diganostics include:
 \examples{
 \donttest{
 
+library(omock)
 library(CohortConstructor)
 library(PhenotypeR)
 library(omock)
