@@ -467,16 +467,42 @@ server <- function(input, output, session) {
       working_info <- info[[working_dbs[i]]]
 
       admin_bullets <- working_info$administrative_details
+      names(admin_bullets) <- stringr::str_to_sentence(gsub("_", " ", names(admin_bullets)))
+      names(admin_bullets) <- ifelse(names(admin_bullets) == "Hma ema catalogue",
+                                     "HMA-EMA catalogue entry",
+                                     names(admin_bullets))
       admin_bullets <- lapply(names(admin_bullets), function(key) {
-        tags$li(tags$b(stringr::str_to_sentence(gsub("_", " ", key)), ": "), admin_bullets[[key]])
+        tags$li(tags$b(key, ": "), admin_bullets[[key]])
       })
 
-      profile_body <- working_info$data_elements_collected
-      profile_body <- lapply(names(profile_body), function(key) {
+      data_collection_body <- working_info$data_collection
+      names(data_collection_body) <- stringr::str_to_sentence(gsub("_", " ", names(data_collection_body)))
+      names(data_collection_body) <- ifelse(names(data_collection_body) == "Healthcare setting type of data",
+                                            "Healthcare setting / type of data",
+                                            names(data_collection_body))
+      data_collection_body <- lapply(names(data_collection_body), function(key) {
         tagList(
-          tags$h6(stringr::str_to_sentence(gsub("_", " ", key)),
+          tags$h6(key,
                   style = "font-weight: bold; margin-bottom: 2px;"),
-          tags$div(profile_body[[key]],
+          tags$div(data_collection_body[[key]],
+                   style = "margin-bottom: 12px;")
+        )
+      })
+
+      omop_standardisation_body <- working_info$omop_standardisation
+      names(omop_standardisation_body) <- stringr::str_to_sentence(gsub("_", " ", names(omop_standardisation_body)))
+      names(omop_standardisation_body) <- ifelse(names(omop_standardisation_body) == "Omop mapping",
+                                                 "Mapping to the OMOP Common Data Model",
+                                                 names(omop_standardisation_body))
+      names(omop_standardisation_body) <- ifelse(names(omop_standardisation_body) == "Omop quality control",
+                                                 "Data quality control for OMOP Common Data Model mapping",
+                                                 names(omop_standardisation_body))
+
+      omop_standardisation_body <- lapply(names(omop_standardisation_body), function(key) {
+        tagList(
+          tags$h6(key,
+                  style = "font-weight: bold; margin-bottom: 2px;"),
+          tags$div(omop_standardisation_body[[key]],
                    style = "margin-bottom: 12px;")
         )
       })
@@ -493,9 +519,12 @@ server <- function(input, output, session) {
                         style = "font-weight: bold; margin-bottom: 2px; color: #750075;"),
                 tags$ul(admin_bullets),
                 tags$br(),
-                tags$h5("Data capture",
+                tags$h5("Data collection",
                         style = "font-weight: bold; margin-bottom: 2px; color: #750075;"),
-                profile_body
+                data_collection_body,
+                tags$h5("OMOP CDM transformation",
+                        style = "font-weight: bold; margin-bottom: 2px; color: #750075;"),
+                omop_standardisation_body
               )
             )
           } else{
