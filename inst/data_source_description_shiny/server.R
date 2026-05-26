@@ -108,7 +108,11 @@ server <- function(input, output, session) {
 
         data_elements_collected = stats::setNames(lapply(data_props, function(id) {
           if (is.null(input[[id]])) character(0) else input[[id]]
-        }), data_props)
+        }), data_props),
+
+        omop_standardisation = stats::setNames(lapply(omop_props, function(id) {
+          if (is.null(input[[id]])) character(0) else input[[id]]
+        }), omop_props)
       )
 
       jsonlite::write_json(
