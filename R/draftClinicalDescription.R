@@ -174,9 +174,9 @@ importClinicalDescription <- function(path){
   for(i in seq_along(path)){
   working_file <- path[[i]]
   cli::cli_inform("Importing clinical description from: '{working_file}'")
-  validate <-jsonvalidate::json_validate(
+  validate <- jsonvalidate::json_validate(
     working_file,
-    system.file("clinical_description_specification.json", package = "PhenotypeR"),
+    clinicalDescriptionSpecification(),
     verbose = TRUE,
     error = TRUE)
   working_json <- jsonlite::read_json(working_file)
