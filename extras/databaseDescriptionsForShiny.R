@@ -1,27 +1,27 @@
 library(jsonlite)
 
 
-empty_details <- list(
-  data_coverage_and_timespan = "N/A (synthetic data)",
-  healthcare_setting_type_of_data = "N/A (synthetic data)",
-  data_collection_process = "N/A (synthetic data)",
-  general_representativeness = "N/A (synthetic data)",
-  data_content_source_coding = "N/A (synthetic data)",
-  data_harmonisation = "N/A (synthetic data)",
-  quality_control = "N/A (synthetic data)",
-  linkage = "N/A (synthetic data)",
-  mortality = "N/A (synthetic data)",
-  limitations = "N/A (synthetic data)"
-)
+spec <- PhenotypeR::dataSourceDescriptionSpecification() |>
+  jsonlite::fromJSON(simplifyVector = FALSE)
+data_props <- spec$properties$data_collection$properties |>
+  names()
+omop_props <- spec$properties$omop_standardisation$properties |>
+  names()
+
+empty_data_collection <- setNames(as.list(rep( "N/A (synthetic data)", length(data_props))), data_props)
+empty_standardisation <- setNames(as.list(rep( "N/A (synthetic data)", length(omop_props))), omop_props)
 
 
 list(
   administrative_details = list(
     name_of_data_source = "GiBleed synthetic database",
     data_source_acronym = "GiBleed",
-    data_source_countries = "N/A (synthetic data)"
+    data_source_website = "",
+    hma_ema_catalogue = "",
+    main_references = ""
   ),
-  data_elements_collected = empty_details) |>
+  data_collection = empty_data_collection,
+  omop_standardisation = empty_standardisation) |>
   write_json(
     path = here::here("extras", "database_descriptions", "GIBleed.json"),
     pretty = TRUE,
@@ -31,9 +31,12 @@ list(
   administrative_details = list(
     name_of_data_source = "synput-1k synthetic database",
     data_source_acronym = "synput-1k",
-    data_source_countries = "N/A (synthetic data)"
+    data_source_website = "",
+    hma_ema_catalogue = "",
+    main_references = ""
   ),
-  data_elements_collected = empty_details) |>
+  data_collection = empty_data_collection,
+  omop_standardisation = empty_standardisation) |>
   write_json(
     path = here::here("extras", "database_descriptions", "synput-1k.json"),
     pretty = TRUE,
@@ -43,9 +46,12 @@ list(
   administrative_details = list(
     name_of_data_source = "synthea-covid19-200k synthetic database",
     data_source_acronym = "synthea-covid19-200k",
-    data_source_countries = "N/A (synthetic data)"
+    data_source_website = "",
+    hma_ema_catalogue = "",
+    main_references = ""
   ),
-  data_elements_collected = empty_details) |>
+  data_collection = empty_data_collection,
+  omop_standardisation = empty_standardisation) |>
   write_json(
     path = here::here("extras", "database_descriptions", "synthea-covid19-200k.json"),
     pretty = TRUE,
