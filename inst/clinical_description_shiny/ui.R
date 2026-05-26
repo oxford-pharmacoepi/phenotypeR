@@ -20,6 +20,25 @@ ui <- bslib::page(
       }
     ")
   ),
+  tags$head(tags$style(HTML("
+    /* Hide the text input box from the fileInput */
+    .custom-file-btn .form-control {
+      display: none !important;
+    }
+    /* Fix the right-side border radius so the button doesn't look cut off */
+    .custom-file-btn .btn-file {
+      border-radius: var(--bs-border-radius, 4px) !important;
+    }
+    /* Remove default bottom margins to match the download button */
+    .custom-file-btn .shiny-input-container {
+      margin-bottom: 0px !important;
+    }
+    /* Keep the upload progress bar neatly tucked under the button */
+    .custom-file-btn .progress {
+      margin-top: 5px !important;
+      margin-bottom: 0px !important;
+    }
+  "))),
 
   bslib::nav_panel(
     title = "Clinical Description",
@@ -68,8 +87,19 @@ ui <- bslib::page(
                  )
                )
     ),
-    shiny::div(class = "mb-4",
-               shiny::uiOutput("clinical_download_section")
+    
+    div(style = "display: flex; gap: 10px; align-items: flex-start;",
+        
+        div(class = "custom-file-btn",
+            fileInput(
+              inputId = "upload_json",
+              label = NULL,
+              buttonLabel = "Upload JSON",
+              width = "auto"
+            )
+        ),
+        
+        shiny::uiOutput("clinical_download_section")
     )
   )
 )

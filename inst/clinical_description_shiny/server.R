@@ -1,5 +1,5 @@
 server <- function(input, output, session) {
-  
+
   required_metadata <- unlist(clinical_description_spec$properties$metadata$required)
   required_clinical <- unlist(clinical_description_spec$properties$clinical_profile$required)
   all_clinical_fields <- c(required_metadata, required_clinical)
@@ -30,6 +30,39 @@ server <- function(input, output, session) {
     }
   })
 
+  shiny::observeEvent(input$upload_json, {
+    shiny::req(input$upload_json)
+
+    tryCatch({
+      validate <- jsonvalidate::json_validate(
+        input$upload_json$datapath,
+        PhenotypeR::clinicalDescriptionSpecification(),
+        verbose = TRUE,
+        error = TRUE)
+      
+      uploaded_values <- jsonlite::fromJSON(input$upload_json$datapath) |>
+        purrr::flatten()
+      id_to_update <- names(uploaded_values)
+      
+      for (id in id_to_update) {
+        val <- uploaded_values[[id]]
+        if (!is.null(val) && length(val) > 0) {
+          shiny::updateTextInput(session, inputId = id, value = val)
+          shiny::updateTextAreaInput(session, inputId = id, value = val)
+          if (grepl("^\\d{4}-\\d{2}-\\d{2}$", as.character(val))) {
+            shiny::updateDateInput(session, inputId = id, value = val)
+          }
+        }
+      }
+      
+      shiny::showNotification("Data successfully loaded from JSON", type = "message")
+      
+    }, error = function(e) {
+      shiny::showNotification(paste("Failed to parse JSON:", e$message), type = "error")
+    })
+  })
+  
+  
   output$clinical_download_section <- shiny::renderUI({
     missing <- clinical_missing()
 
@@ -78,26 +111,23 @@ server <- function(input, output, session) {
     }
   )
 
-  
-  # 1. Dedicated observer for the button click
+
   shiny::observeEvent(input$draft_with_ai, {
-    
-    # Handle Validation: Instead of rendering UI text, use standard Shiny notifications
+
     if (input$phenotype_name == "") {
       shiny::showNotification("Phenotype name must be provided", type = "error", duration = 5)
       return()
     }
-    
+
     if (is.null(chat)) {
       shiny::showNotification(
-        "No LLM available. Run app locally using PhenotypeR::getClinicalDescription() and create ellmer chat object in global.R", 
-        type = "error", 
+        "No LLM available. Run app locally using PhenotypeR::draftClinicalDescription() and create ellmer chat object in global.R to use this functionality",
+        type = "error",
         duration = 10
       )
       return()
     }
-    
-    # 2. Trigger UI state changes (Disable button, show loading modal)
+
     shinyjs::disable("draft_with_ai")
     shiny::showModal(
       shiny::modalDialog(
@@ -105,31 +135,28 @@ server <- function(input, output, session) {
         shiny::div(
           class = "d-flex align-items-center gap-3",
           shiny::icon("spinner", class = "fa-spin fa-2x text-primary"),
-          shiny::span("Please wait while LLM generates the clinical description", 
+          shiny::span("Please wait while LLM generates the clinical description",
                       class = "fs-5")
         ),
-        footer = NULL,      
-        easyClose = FALSE  
+        footer = NULL,
+        easyClose = FALSE
       )
     )
-    
-    # Ensure the button enables AND the modal closes when finished, even if it fails
+
     on.exit({
       shinyjs::enable("draft_with_ai")
       shiny::removeModal()
     })
-    
-    # 3. Execute the heavy logic
+
     tmp <- file.path(tempdir(), omopgenerics::uniqueTableName())
     dir.create(tmp)
-    
-    PhenotypeR::getClinicalDescription(chat,
+
+    PhenotypeR::draftClinicalDescription(chat,
                                        name = input$phenotype_name,
                                        outputDir = tmp)
-    
+
     clinical_description <- PhenotypeR:::importClinicalDescription(path = tmp)
-    
-    # 4. Update the text areas
+
     for (i in seq_along(names(clinical_description[[1]]$clinical_profile))) {
       shiny::updateTextAreaInput(
         session = session,
@@ -137,7 +164,7 @@ server <- function(input, output, session) {
         value = clinical_description[[1]]$clinical_profile[[i]]
       )
     }
-    
+
     for (i in seq_along(names(clinical_description[[1]]$metadata))) {
       shiny::updateTextAreaInput(
         session = session,
@@ -146,5 +173,5 @@ server <- function(input, output, session) {
       )
     }
   })
-  
+
 }

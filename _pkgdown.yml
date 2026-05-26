@@ -47,7 +47,8 @@ reference:
   - shinyDiagnostics
 - subtitle: Clinical and database descriptions
 - contents:
-  - getClinicalDescription
+  - clinicalDescriptionSpecification
+  - draftClinicalDescription
   - importClinicalDescription
   - shinyClinicalDescriptions
   - dataSourceDescriptionSpecification

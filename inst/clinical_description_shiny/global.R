@@ -10,9 +10,8 @@ library(shinyjs)
 # e.g. chat <- ellmer::chat("google_gemini")
 chat <- NULL
 
-clinical_description_spec <- jsonlite::fromJSON(system.file("clinical_description_specification.json", 
-                                                            package = "PhenotypeR"),
-                                                simplifyVector = FALSE)
+clinical_description_spec <- PhenotypeR::clinicalDescriptionSpecification() |>
+  jsonlite::fromJSON(simplifyVector = FALSE)
 
 get_label_text <- function(id) {
   switch(id,

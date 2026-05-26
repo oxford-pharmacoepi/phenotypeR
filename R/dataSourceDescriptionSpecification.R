@@ -8,15 +8,15 @@
 #' @export
 dataSourceDescriptionSpecification <- function(path = NULL){
 
- database_description_spec <-  defineDataSourceSpec()
+  database_description_spec <-  defineDataSourceSpec()
 
- if(!is.null(path)){
-   jsonlite::write_json(
-    database_description_spec,
-    path = here::here("inst", "data_source_specification.json"),
-    auto_unbox = TRUE,
-    pretty = TRUE)
- }
+  if(!is.null(path)){
+    jsonlite::write_json(
+      database_description_spec,
+      path = here::here("inst", "data_source_specification.json"),
+      auto_unbox = TRUE,
+      pretty = TRUE)
+  }
 
   jsonlite::toJSON(
     database_description_spec,
@@ -123,22 +123,22 @@ defineDataSourceSpec <- function() {
       omop_standardisation = list(
         type = "object",
         description = "Information related to mapping data to the OMOP Common Data Model",
-          properties = list(
-            omop_mapping = list(
-              type = "string",
-              description = "Description of process of mapping source data to the OMOP Common Data Model"
-            ),
-            omop_quality_control = list(
-              type = "string",
-              description = "Summary of quality control processes performed while mapping to the OMOP Common Data Model and on the mapped data."
-            )
+        properties = list(
+          omop_mapping = list(
+            type = "string",
+            description = "Description of process of mapping source data to the OMOP Common Data Model"
           ),
-          required = c("omop_mapping",
-                       "omop_quality_control"),
-          additionalProperties = FALSE
+          omop_quality_control = list(
+            type = "string",
+            description = "Summary of quality control processes performed while mapping to the OMOP Common Data Model and on the mapped data."
+          )
         ),
+        required = c("omop_mapping",
+                     "omop_quality_control"),
+        additionalProperties = FALSE
+      ),
 
-    required = c("administrative_details", "data_elements_collected", "omop_standardisation")
-  )
+      required = c("administrative_details", "data_elements_collected", "omop_standardisation")
+    )
   )
 }

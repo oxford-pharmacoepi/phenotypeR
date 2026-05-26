@@ -1,14 +1,14 @@
 
-#' Get clinical descriptions using an LLM
+#' Draft clinical descriptions using an LLM
 #'
 #' @param chat An ellmer chat
 #' @param name Clinical event of interest
 #' @param outputDir Folder to save clinical descriptions.
 #'
-#' @returns Creates a word document with a clinical description for each event.
+#' @returns Creates a draft clinical description for each event of interest.
 #' @export
 #'
-getClinicalDescription <- function(chat, name, outputDir){
+draftClinicalDescription <- function(chat, name, outputDir){
 
   rlang::check_installed("ellmer")
   rlang::check_installed("jsonlite")
@@ -113,7 +113,7 @@ exportClinicalDescription <- function(clinicalDescription, modelName, outputDir)
         metadata = list(
           phenotype_name = name,
           version = "1.0",
-          created_by = paste0(modelName, " (via PhenotypeR::getClinicalDescription())"),
+          created_by = paste0(modelName, " (via PhenotypeR::draftClinicalDescription())"),
           created_date = as.Date(Sys.Date()),
           last_edited_by = "N/A",
           last_edited_date = as.Date(Sys.Date()),
@@ -174,9 +174,9 @@ importClinicalDescription <- function(path){
   for(i in seq_along(path)){
   working_file <- path[[i]]
   cli::cli_inform("Importing clinical description from: '{working_file}'")
-  validate <-jsonvalidate::json_validate(
+  validate <- jsonvalidate::json_validate(
     working_file,
-    system.file("clinical_description_specification.json", package = "PhenotypeR"),
+    clinicalDescriptionSpecification(),
     verbose = TRUE,
     error = TRUE)
   working_json <- jsonlite::read_json(working_file)
