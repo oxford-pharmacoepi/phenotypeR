@@ -40,7 +40,8 @@ cdm$my_cohort <- cdm$my_cohort |>
                                                        "type_2_diabetes"))
 result[[working_dataset]] <- PhenotypeR::phenotypeDiagnostics(cohort = cdm$my_cohort,
                                                               databaseDiagnostics = list("clinicalRecordsSummary" = TRUE),
-                                                              cohortDiagnostics = list("cohortSurvival" = TRUE),
+                                                              cohortDiagnostics = list("cohortSurvival" = TRUE,
+                                                                                        "compareCohorts" = TRUE),
                                                               populationDiagnostics = list("populationSample" = 100000))
 }
 result <- omopgenerics::bind(result)
