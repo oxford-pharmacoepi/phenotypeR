@@ -100,8 +100,8 @@ cdm$new_cohort <- conceptCohort(cdm,
 #> • date_of_birth: density
 #> ! Table is collected to memory as not all requested estimates are supported on
 #>   the database side
-#> → Start summary of data, at 2026-05-26 08:37:37.480056
-#> ✔ Summary finished, at 2026-05-26 08:37:37.537568
+#> → Start summary of data, at 2026-05-26 16:47:41.319762
+#> ✔ Summary finished, at 2026-05-26 16:47:41.382287
 #> ℹ retrieving cdm object from cdm_table.
 #> Warning: ! There are 2649 individuals not included in the person table.
 #> ℹ The following estimates will be calculated:
@@ -109,8 +109,8 @@ cdm$new_cohort <- conceptCohort(cdm,
 #> • observation_period_end_date: density
 #> ! Table is collected to memory as not all requested estimates are supported on
 #>   the database side
-#> → Start summary of data, at 2026-05-26 08:37:40.832013
-#> ✔ Summary finished, at 2026-05-26 08:37:40.898479
+#> → Start summary of data, at 2026-05-26 16:47:44.640252
+#> ✔ Summary finished, at 2026-05-26 16:47:44.712024
 
  cdmDisconnect(cdm = cdm)
 # }
