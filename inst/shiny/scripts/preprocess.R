@@ -78,10 +78,12 @@ if(length(dataFiltered) > 0){
         dplyr::distinct() |>
         dplyr::filter(!grepl("_sampled|_matched", cohort_name),
                       cohort_name != "overall")
-      values$shared_cohort_names  <- suppressWarnings(c(values$shared_cohort_names$cohort_name,
-                                                        values$shared_cohort_names$outcome_cohort_name)) |>
+      values$shared_cohort_names  <- c(values$shared_cohort_names$cohort_name,
+                                       values$shared_cohort_names$outcome_cohort_name) |>
+        unique() |>
         sort()
     }
+    values$shared_cohort_names <- values$shared_cohort_names[values$shared_cohort_names != "overall"]
   }
 }else{
   diagnostics <- ""
