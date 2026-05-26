@@ -23,8 +23,10 @@
 
 ### Clinical and database descriptions
 
-- [`getClinicalDescription()`](https://ohdsi.github.io/PhenotypeR/reference/getClinicalDescription.md)
-  : Get clinical descriptions using an LLM
+- [`clinicalDescriptionSpecification()`](https://ohdsi.github.io/PhenotypeR/reference/clinicalDescriptionSpecification.md)
+  : Clinical description specification
+- [`draftClinicalDescription()`](https://ohdsi.github.io/PhenotypeR/reference/draftClinicalDescription.md)
+  : Draft clinical descriptions using an LLM
 - [`importClinicalDescription()`](https://ohdsi.github.io/PhenotypeR/reference/importClinicalDescription.md)
   : Import clinical descriptions
 - [`shinyClinicalDescriptions()`](https://ohdsi.github.io/PhenotypeR/reference/shinyClinicalDescriptions.md)
