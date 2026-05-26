@@ -1,6 +1,7 @@
-ui <- bslib::page_navbar(
+ui <- bslib::page(
+  
   theme = bslib::bs_theme(version = 5, preset = "lumen"),
-  title = "Phenotype Development",
+  
   id = "nav",
   fillable = FALSE,
 
@@ -53,9 +54,6 @@ ui <- bslib::page_navbar(
 
                  ),
 
-
-
-
                  bslib::accordion_panel(
                    title = "Metadata",
                    icon = shiny::icon("tags"),
@@ -72,35 +70,6 @@ ui <- bslib::page_navbar(
     ),
     shiny::div(class = "mb-4",
                shiny::uiOutput("clinical_download_section")
-    )
-  ),
-
-  bslib::nav_panel(
-    title = "Database Description",
-    shiny::div(class = "p-3",
-               shiny::titlePanel(db_spec$title),
-               shiny::p(db_spec$description,
-                        class = "text-muted mb-4"),
-               bslib::accordion(
-                 multiple = TRUE,
-                 open = c("Administrative details",
-                          "Data elements collected"),
-
-                 bslib::accordion_panel(
-                   title = "Administrative details",
-                   icon = shiny::icon("file-medical"),
-                   db_admin_ui
-                 ),
-
-                 bslib::accordion_panel(
-                   title = "Data elements collected",
-                   icon = shiny::icon("file-medical"),
-                   db_data_ui
-                 )
-               )
-    ),
-    shiny::div(class = "mb-4",
-               shiny::uiOutput("db_download_section")
     )
   )
 )
