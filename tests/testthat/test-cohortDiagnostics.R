@@ -72,6 +72,8 @@ test_that("run with multiple cohorts", {
                                  schema ="main", overwrite = TRUE)
   expect_no_error(result <- cdm$my_cohort |>
                     cohortDiagnostics())
+  expect_no_error(result_comp <- cdm$my_cohort |>
+                    cohortDiagnostics(compareCohorts = TRUE))
 
   # check density is being calculated
   expect_true(any(stringr::str_detect(
@@ -90,18 +92,26 @@ test_that("run with multiple cohorts", {
                      "cohort_2", "cohort_2_matched", "cohort_2_sampled"))
 
   # cohort and timing and overlap should have been estimated now we have more than one cohort
-  expect_true(any(stringr::str_detect(
+  expect_false(any(stringr::str_detect(
     omopgenerics::settings(result) |>
       dplyr::pull("result_type"),
     "cohort_overlap")))
   expect_true(any(stringr::str_detect(
-                   omopgenerics::settings(result) |>
+    omopgenerics::settings(result_comp) |>
+      dplyr::pull("result_type"),
+    "cohort_overlap")))
+  expect_false(any(stringr::str_detect(
+    omopgenerics::settings(result) |>
+      dplyr::pull("result_type"),
+    "cohort_timing")))
+  expect_true(any(stringr::str_detect(
+                   omopgenerics::settings(result_comp) |>
                     dplyr::pull("result_type"),
                    "cohort_timing")))
 
   # Check matched cohorts
   expect_true(
-    all(sort(unique(result$group_level)) == c("cohort_1", "cohort_1 &&& cohort_2", "cohort_1_matched", "cohort_1_sampled",
+    all(sort(unique(result_comp$group_level)) == c("cohort_1", "cohort_1 &&& cohort_2", "cohort_1_matched", "cohort_1_sampled",
                                                         "cohort_2", "cohort_2 &&& cohort_1", "cohort_2_matched", "cohort_2_sampled"))
   )
 
@@ -224,6 +234,7 @@ test_that("run with multiple cohorts", {
   cdm <- CDMConnector::copyCdmTo(con = db, cdm = cdm_local,
                                  schema ="main", overwrite = TRUE)
   result <- cohortDiagnostics(cdm$my_cohort,
+                              compareCohorts = TRUE,
                               cohortSurvival = TRUE)
 
   expect_true("summarise_cohort_count" %in%
