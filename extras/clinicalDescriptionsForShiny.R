@@ -7,7 +7,7 @@ PhenotypeR::draftClinicalDescription(chat = chat,
                                             "user_of_warfarin",
                                             "user_of_acetaminophen",
                                             "user_of_morphine",
-                                            "measurement_of_prostate_specific_antigen_level"),
+                                            "measurement_of_psa"),
                                    outputDir = here::here("extras", "clinical_descriptions"))
 # check if will pass validation
 # importClinicalDescription(here::here("extras", "clinical_descriptions"))

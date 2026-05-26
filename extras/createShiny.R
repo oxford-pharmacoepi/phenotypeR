@@ -6,7 +6,7 @@ codes <- list(
   "user_of_morphine" = c(1110410L, 35605858L, 40169988L),
   "hypertension" = c(320128L),
   "type_2_diabetes" = c(201826L, 40482801L),
-  "measurement_of_prostate_specific_antigen_level" = c(2617206L),
+  "measurement_of_psa" = c(2617206L),
   "hospitalised_inpatient" = c(9201L)
 )
 
