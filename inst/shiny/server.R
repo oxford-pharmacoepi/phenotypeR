@@ -467,19 +467,23 @@ server <- function(input, output, session) {
       working_info <- info[[working_dbs[i]]]
 
       admin_bullets <- working_info$administrative_details
-      names(admin_bullets) <- stringr::str_to_sentence(gsub("_", " ", names(admin_bullets)))
-      names(admin_bullets) <- ifelse(names(admin_bullets) == "Hma ema catalogue",
-                                     "HMA-EMA catalogue entry",
-                                     names(admin_bullets))
+      if(!is.null(admin_bullets)){
+        names(admin_bullets) <- stringr::str_to_sentence(gsub("_", " ", names(admin_bullets)))
+        names(admin_bullets) <- ifelse(names(admin_bullets) == "Hma ema catalogue",
+                                       "HMA-EMA catalogue entry",
+                                       names(admin_bullets))
+      }
       admin_bullets <- lapply(names(admin_bullets), function(key) {
         tags$li(tags$b(key, ": "), admin_bullets[[key]])
       })
 
       data_collection_body <- working_info$data_collection
-      names(data_collection_body) <- stringr::str_to_sentence(gsub("_", " ", names(data_collection_body)))
-      names(data_collection_body) <- ifelse(names(data_collection_body) == "Healthcare setting type of data",
-                                            "Healthcare setting / type of data",
-                                            names(data_collection_body))
+      if(!is.null(data_collection_body)){
+        names(data_collection_body) <- stringr::str_to_sentence(gsub("_", " ", names(data_collection_body)))
+        names(data_collection_body) <- ifelse(names(data_collection_body) == "Healthcare setting type of data",
+                                              "Healthcare setting / type of data",
+                                              names(data_collection_body))
+      }
       data_collection_body <- lapply(names(data_collection_body), function(key) {
         tagList(
           tags$h6(key,
@@ -490,13 +494,15 @@ server <- function(input, output, session) {
       })
 
       omop_standardisation_body <- working_info$omop_standardisation
-      names(omop_standardisation_body) <- stringr::str_to_sentence(gsub("_", " ", names(omop_standardisation_body)))
-      names(omop_standardisation_body) <- ifelse(names(omop_standardisation_body) == "Omop mapping",
-                                                 "Mapping to the OMOP Common Data Model",
-                                                 names(omop_standardisation_body))
-      names(omop_standardisation_body) <- ifelse(names(omop_standardisation_body) == "Omop quality control",
-                                                 "Data quality control for OMOP Common Data Model mapping",
-                                                 names(omop_standardisation_body))
+      if(!is.null(omop_standardisation_body)){
+        names(omop_standardisation_body) <- stringr::str_to_sentence(gsub("_", " ", names(omop_standardisation_body)))
+        names(omop_standardisation_body) <- ifelse(names(omop_standardisation_body) == "Omop mapping",
+                                                   "Mapping to the OMOP Common Data Model",
+                                                   names(omop_standardisation_body))
+        names(omop_standardisation_body) <- ifelse(names(omop_standardisation_body) == "Omop quality control",
+                                                   "Data quality control for OMOP Common Data Model mapping",
+                                                   names(omop_standardisation_body))
+      }
 
       omop_standardisation_body <- lapply(names(omop_standardisation_body), function(key) {
         tagList(
@@ -986,9 +992,13 @@ server <- function(input, output, session) {
       tbl <- createAchillesCodeUseInteractive()
 
       # column ordering by codelist and first column with a count
-      order <- list("Codelist name"  = "asc",
-                    "count" = "desc")
-      names(order)[2] <- names(tbl)[ncol(tbl)]
+      if(length(names(tbl))>=11){
+        order <- list("Codelist name"  = "asc",
+                      "count" = "desc")
+        names(order)[2] <- names(tbl)[11]
+      } else {
+        order <- list("Codelist name"  = "asc")
+      }
 
       # suppressed to NA
       tbl <- tbl |>
