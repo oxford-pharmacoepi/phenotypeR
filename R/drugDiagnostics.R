@@ -515,7 +515,7 @@ reportIngredient <- function(conceptTib) {
 
   for (codelist in codelists) {
     ing <- ingredients$ingredient_name[ingredients$codelist_name == codelist]
-    if (length(ing) > 0) {
+    if (length(ing) == 0) {
       mes <- c(mes, "!" = paste0("No common ingredient found for codelist: `", codelist, "`."))
     } else {
       pl <- ifelse(length(ing) == 1, "ingredient", paste0(length(ing), " ingredients"))
