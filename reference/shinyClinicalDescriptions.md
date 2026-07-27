@@ -30,6 +30,6 @@ Shiny app
 # \donttest{
 shinyClinicalDescriptions(tempdir())
 #> ℹ Creating shiny from provided data
-#> ℹ Shiny app created in /tmp/RtmprxOPBm/descritpionShiny
+#> ℹ Shiny app created in /tmp/RtmpXy1srL/descritpionShiny
 # }
 ```

@@ -1,12 +1,12 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   CreateDescriptions: CreateDescriptions.html
   PhenotypeDiagnostics: PhenotypeDiagnostics.html
   PhenotypeExpectations: PhenotypeExpectations.html
   ShinyDiagnostics: ShinyDiagnostics.html
-last_built: 2026-05-27T06:46Z
+last_built: 2026-07-27T11:01Z
 urls:
   reference: https://ohdsi.github.io/PhenotypeR/reference
   article: https://ohdsi.github.io/PhenotypeR/articles
