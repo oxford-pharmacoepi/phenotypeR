@@ -937,15 +937,7 @@ ui <- fluidPage(
                                            label = "Vertical axis",
                                            selected = c("time"),
                                            multiple = FALSE,
-                                           choices = c("time", "measurements_per_subject"),
-                                           options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                                         ),
-                                         shinyWidgets::pickerInput(
-                                           inputId = "measurement_summary_time_scale",
-                                           label = "Time scale",
-                                           selected = c("days"),
-                                           multiple = FALSE,
-                                           choices = c("days", "years"),
+                                           choices = c("days_between_measurements", "measurements_per_subject"),
                                            options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                                          ),
                                          shinyWidgets::pickerInput(
