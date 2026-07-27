@@ -87,12 +87,12 @@ cdm$warfarin <- conceptCohort(cdm,
 
 result <- cdm$warfarin |>
   populationDiagnostics(populationSample = 100000)
-#> [2026-07-27 11:04:48] - Population diagnosics - denominator cohort
-#> [2026-07-27 11:04:48] - Population diagnosics - sampling person table to 1e+05
+#> [2026-07-27 11:15:26] - Population diagnosics - denominator cohort
+#> [2026-07-27 11:15:26] - Population diagnosics - sampling person table to 1e+05
 #> people
 #> ℹ Creating denominator cohorts
 #> ✔ Cohorts created in 0 min and 3 sec
-#> [2026-07-27 11:04:52] - Population diagnosics - incidence
+#> [2026-07-27 11:15:30] - Population diagnosics - incidence
 #> ℹ Getting incidence for analysis 1 of 7
 #> ℹ Getting incidence for analysis 2 of 7
 #> ℹ Getting incidence for analysis 3 of 7
@@ -101,7 +101,7 @@ result <- cdm$warfarin |>
 #> ℹ Getting incidence for analysis 6 of 7
 #> ℹ Getting incidence for analysis 7 of 7
 #> ✔ Overall time taken: 0 mins and 9 secs
-#> [2026-07-27 11:05:01] - Population diagnosics - prevalence
+#> [2026-07-27 11:15:39] - Population diagnosics - prevalence
 #> ℹ Getting prevalence for analysis 1 of 7
 #> ℹ Getting prevalence for analysis 2 of 7
 #> ℹ Getting prevalence for analysis 3 of 7
