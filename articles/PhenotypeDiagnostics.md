@@ -9,22 +9,15 @@ We’ll use the following packages and mock data for example purposes:
 
 ``` r
 
+library(omock)
 library(CohortConstructor)
 library(OmopSketch)
 library(PhenotypeR)
 library(dplyr)
 library(DBI)
 library(duckdb)
-library(CDMConnector)
 
-con <- dbConnect(duckdb(), 
-                 eunomiaDir("synpuf-1k", "5.3"))
-
-cdm <- cdmFromCon(con = con, 
-                  cdmName = "Eunomia Synpuf",
-                  cdmSchema   = "main",
-                  writeSchema = "main", 
-                  achillesSchema = "main")
+cdm <- omock::mockCdmFromDataset("GiBleed", source = "duckdb")
 cdm
 ```
 
