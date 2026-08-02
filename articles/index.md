@@ -2,7 +2,6 @@
 
 ### All vignettes
 
-- [CreateDescriptions](https://ohdsi.github.io/PhenotypeR/articles/CreateDescriptions.md):
 - [Phenotype
   diagnostics](https://ohdsi.github.io/PhenotypeR/articles/PhenotypeDiagnostics.md):
 - [Phenotype
