@@ -22,11 +22,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
-library(CDMConnector)
-if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-if (!eunomiaIsAvailable()) downloadEunomiaData(datasetName = "synpuf-1k", cdmVersion = "5.3")
 ```
 
 ## Introduction
@@ -36,22 +31,15 @@ In this vignette, we are going to present how to run `PhenotypeDiagnostics()`.
 We'll use the following packages and mock data for example purposes:
 
 ```{r, message=FALSE, warning=FALSE}
+library(omock)
 library(CohortConstructor)
 library(OmopSketch)
 library(PhenotypeR)
 library(dplyr)
 library(DBI)
 library(duckdb)
-library(CDMConnector)
 
-con <- dbConnect(duckdb(), 
-                 eunomiaDir("synpuf-1k", "5.3"))
-
-cdm <- cdmFromCon(con = con, 
-                  cdmName = "Eunomia Synpuf",
-                  cdmSchema   = "main",
-                  writeSchema = "main", 
-                  achillesSchema = "main")
+cdm <- omock::mockCdmFromDataset("GiBleed", source = "duckdb")
 cdm
 ```
 
